@@ -21,24 +21,18 @@ class MvSpider(CrawlSpider):
     def parse_item(self, response):
         item = {}
         info = response.xpath('//div[@class="wshop wshop-layzeload"]/text()').extract_first()
-        if info:
+        try:
             item['hometown'] = info.split("/")[2].strip().split()[1]
             item['birthday'] = info.split("/")[1].strip().split()[1]
-        else:
+        except:
             item['birthday'] = "未知"
             item['hometown'] = "未知"
         item['name'] = response.xpath('//h1[@class="title"]/text()').extract_first()
         images = response.xpath('//div[@class="post-content"]//img/@src')
-        if images:
+        try:
             item['image_urls'] = images.extract()
-        else:
+        except:
             item['image_urls'] = ''
         item['images'] = ''
         item['detail_url'] = response.url
         yield item
-        # item = {}
-        # item['name'] = response.xpath('//h1[@class="title"]/text()').extract_first()
-        # item['image_urls'] = response.xpath('//div[@class="post-content"]//img/@src').extract()
-        # item['images'] = ''
-        # item['detail_url'] = response.url
-        # yield item
