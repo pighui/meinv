@@ -6,11 +6,11 @@
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import csv
 import os
+from hashlib import sha1
 
 from scrapy import Request
 from scrapy.pipelines.images import ImagesPipeline
 from meinv import settings
-from util.sha_1 import sha_name
 
 
 class MvImagePipeline(ImagesPipeline):
@@ -34,7 +34,7 @@ class MvImagePipeline(ImagesPipeline):
         try:
             filename = request.url.split("/")[-1].split(".")[0]
         except:
-            filename = sha_name(request.url)
+            filename = sha1(request.url.encode(encoding='utf-8')).hexdigest()
         try:
             ext_name = request.url.split(".")[-1]
         except:
